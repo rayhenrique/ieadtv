@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+:root {
+    --background: #ffffff;
+    --foreground: #111827;
+    --primary: #2281C5;
+    --primary-hover: #1D6CA6;
+    --primary-foreground: #ffffff;
+    --surface: #F9FAFB;
+    --muted: #F9FAFB;
+    --muted-foreground: #4B5563;
+    --card: #ffffff;
+    --card-foreground: #111827;
+    --border: #E5E7EB;
+    --input: #E5E7EB;
+    --ring: #2281C5;
+    --radius: 0.5rem;
+    --secondary: #F3F4F6;
+    --secondary-foreground: #111827;
+    --accent: #F3F4F6;
+    --accent-foreground: #111827;
+    --destructive: #EF4444;
+    --destructive-foreground: #ffffff;
+    --popover: #ffffff;
+    --popover-foreground: #111827;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-surface: var(--surface);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: var(--radius);
+    --radius-lg: calc(var(--radius) + 4px);
+    --radius-xl: calc(var(--radius) + 8px);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus visible styles */
+*:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Home page subtle visuals */
+.home-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.home-section-container {
+    position: relative;
+    z-index: 1;
+}
+
+.home-section-white::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(900px 400px at 90% 0%, rgba(34, 129, 197, 0.08), transparent 60%),
+        radial-gradient(700px 360px at -10% 100%, rgba(34, 129, 197, 0.06), transparent 62%);
+    pointer-events: none;
+}
+
+.home-section-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.3)),
+        radial-gradient(760px 340px at 50% -10%, rgba(34, 129, 197, 0.07), transparent 65%);
+    pointer-events: none;
+}
+
+.home-title-accent {
+    margin-top: 0.6rem;
+    width: 72px;
+    height: 3px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, rgba(34, 129, 197, 0.95), rgba(34, 129, 197, 0.2));
+}
+
+.home-lift-card {
+    transition:
+        transform 240ms ease,
+        box-shadow 260ms ease,
+        border-color 260ms ease;
+}
+
+.home-lift-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(34, 129, 197, 0.35);
+    box-shadow: 0 14px 30px -24px rgba(17, 24, 39, 0.45), 0 10px 22px -22px rgba(34, 129, 197, 0.55);
+}
+
+.home-video-panel {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(249, 250, 251, 0.9)),
+        radial-gradient(520px 240px at 75% 0%, rgba(34, 129, 197, 0.1), transparent 72%);
+}
+
+.home-cta-card {
+    background:
+        linear-gradient(180deg, #ffffff, #f8fbfe);
+}
+
+.stagger-grid > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: homeFadeUp 520ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.stagger-grid > *:nth-child(2) {
+    animation-delay: 70ms;
+}
+
+.stagger-grid > *:nth-child(3) {
+    animation-delay: 120ms;
+}
+
+.stagger-grid > *:nth-child(4) {
+    animation-delay: 170ms;
+}
+
+.stagger-grid > *:nth-child(5) {
+    animation-delay: 220ms;
+}
+
+.stagger-grid > *:nth-child(6) {
+    animation-delay: 270ms;
+}
+
+@keyframes homeFadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-lift-card {
+        transition: none;
+    }
+
+    .home-lift-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .stagger-grid > * {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+}
