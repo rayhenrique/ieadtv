@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IEADTV
 
-## Getting Started
+Portal institucional e administrativo da Igreja Evangélica Assembleia de Deus em Teotonio Vilela.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router)
+- React 19
+- Supabase (Auth, Database e Storage)
+- Tailwind CSS 4
+
+## Requisitos
+
+- Node.js 20+
+- npm 10+
+- Projeto Supabase configurado
+
+## Variaveis de ambiente
+
+Crie o arquivo `.env.local` na raiz do projeto com:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+Variaveis opcionais para YouTube:
+
+```env
+YOUTUBE_CHANNEL_ID=
+YOUTUBE_HANDLE=
+```
+
+## Rodar localmente
+
+```bash
+npm install
+npm run dev
+```
+
+Acesse:
+
+- Site publico: `http://localhost:3000`
+- Login admin: `http://localhost:3000/login`
+- Painel admin: `http://localhost:3000/admin/dashboard`
+
+## Scripts disponiveis
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run start
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Estrutura principal
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `app/(public)`: paginas publicas
+- `app/(admin)`: painel administrativo
+- `lib/actions`: server actions
+- `lib/supabase`: clientes Supabase (browser/server/admin)
+- `components`: componentes reutilizaveis
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Usuarios administrativos
 
-## Learn More
+O sistema usa autenticacao do Supabase.
 
-To learn more about Next.js, take a look at the following resources:
+- Para criar o primeiro usuario admin, use o painel do Supabase (Auth > Users) ou o modulo `Usuarios` no admin.
+- O modulo `Usuarios` no painel depende de `SUPABASE_SERVICE_ROLE_KEY` configurada.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Manual completo de deploy:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `docs/DEPLOY.md`
