@@ -345,6 +345,11 @@ export default function AdminPaginasPage() {
         return { url: publicUrl };
     };
 
+    const selectedPagina = paginas.find((p) => p.slug === selectedSlug);
+    const ultimaAtualizacao = selectedPagina?.updated_at
+        ? new Date(selectedPagina.updated_at).toLocaleString("pt-BR")
+        : "—";
+
     if (loading) {
         return (
             <div className="flex h-64 items-center justify-center">
@@ -420,12 +425,7 @@ export default function AdminPaginasPage() {
 
                 <div className="flex items-center justify-between">
                     <p className="text-xs text-muted-foreground">
-                        Última atualização:{" "}
-                        {paginas.find((p) => p.slug === selectedSlug)?.updated_at
-                            ? new Date(
-                                paginas.find((p) => p.slug === selectedSlug)!.updated_at
-                            ).toLocaleString("pt-BR")
-                            : "—"}
+                        Última atualização: {ultimaAtualizacao}
                     </p>
                     <button
                         onClick={handleSave}

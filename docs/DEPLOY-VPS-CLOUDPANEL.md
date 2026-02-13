@@ -1,0 +1,103 @@
+# Deploy VPS CloudPanel (Hostinger)
+
+Guia objetivo para publicar o projeto IEADTV na VPS da Hostinger com CloudPanel, usando o dominio `ieadtv.kltecnologia.com`.
+
+## 1. DNS do dominio
+
+No painel de DNS onde o dominio esta gerenciado:
+
+- Crie/edite um registro `A`
+- Host: `ieadtv`
+- Valor: `IP_PUBLICO_DA_VPS`
+- TTL: padrao (ex: 300)
+
+Se usar `www`, crie tambem:
+
+- Tipo: `CNAME`
+- Host: `www`
+- Valor: `ieadtv.kltecnologia.com`
+
+## 2. Criar site Node.js no CloudPanel
+
+No CloudPanel:
+
+1. `Sites` -> `Add Site` -> `Create a Node.js Site`
+2. Domain Name: `ieadtv.kltecnologia.com`
+3. Node.js Version: `20`
+4. Site User: manter padrao (ou criar dedicado)
+5. Finalize em `Create`
+
+## 3. Conectar por SSH e baixar o projeto
+
+```bash
+ssh root@IP_DA_VPS
+su - cloudpanel
+cd /home/cloudpanel/htdocs/ieadtv.kltecnologia.com
+git clone https://github.com/rayhenrique/ieadtv.git .
+npm ci
+```
+
+## 4. Variaveis de ambiente
+
+Crie `.env.local`:
+
+```bash
+cp .env.example .env.local
+nano .env.local
+```
+
+Preencha com valores reais:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+YOUTUBE_CHANNEL_ID=
+YOUTUBE_HANDLE=
+```
+
+## 5. Build e start
+
+No diretorio do projeto:
+
+```bash
+npm run build
+```
+
+No CloudPanel, abra o site criado e configure:
+
+- App Root: `/home/cloudpanel/htdocs/ieadtv.kltecnologia.com`
+- Start Command: `npm run start`
+- Port: `3000`
+
+Inicie/reinicie a aplicacao pelo CloudPanel.
+
+## 6. SSL (Let's Encrypt)
+
+No CloudPanel:
+
+1. Site `ieadtv.kltecnologia.com` -> `SSL/TLS`
+2. `New Let's Encrypt Certificate`
+3. Marque `Issue Certificate` (e `Auto Renew`)
+4. Confirme criacao
+
+## 7. Atualizar em producao
+
+Sempre que subir mudancas:
+
+```bash
+cd /home/cloudpanel/htdocs/ieadtv.kltecnologia.com
+git pull origin main
+npm ci
+npm run build
+```
+
+Depois, reinicie o processo Node.js no CloudPanel.
+
+## 8. Checklist rapido
+
+- DNS apontando para a VPS
+- Build sem erros (`npm run build`)
+- `.env.local` preenchido
+- App iniciando em `npm run start`
+- SSL ativo em `https://ieadtv.kltecnologia.com`
