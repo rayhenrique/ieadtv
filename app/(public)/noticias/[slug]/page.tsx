@@ -1,4 +1,5 @@
 import { getPublicNewsItem } from "@/lib/actions/noticias";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,19 +14,54 @@ interface NewsDetailPageProps {
 
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: NewsDetailPageProps) {
+const SITE_URL =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://ieadtv.kltecnologia.com";
+
+export async function generateMetadata({ params }: NewsDetailPageProps): Promise<Metadata> {
     const { slug } = await params
     const newsItem = await getPublicNewsItem(slug);
 
     if (!newsItem) {
         return {
             title: "Notícia não encontrada",
+            description: "A notícia solicitada não está disponível.",
         };
     }
 
+    const description =
+        newsItem.resumo ||
+        "Leia esta notícia no portal oficial da Assembleia de Deus em Teotônio Vilela.";
+    const shareImage = newsItem.imagem_capa_url || `${SITE_URL}/images/share-cover.png`;
+    const publishedTime = newsItem.published_at || newsItem.created_at;
+
     return {
-        title: `${newsItem.titulo} - AD Teotônio Vilela`,
-        description: newsItem.resumo,
+        title: newsItem.titulo,
+        description,
+        alternates: {
+            canonical: `/noticias/${newsItem.slug}`,
+        },
+        openGraph: {
+            type: "article",
+            url: `${SITE_URL}/noticias/${newsItem.slug}`,
+            title: newsItem.titulo,
+            description,
+            siteName: "AD Teotônio Vilela",
+            locale: "pt_BR",
+            publishedTime,
+            authors: [newsItem.autor || "ADTV"],
+            images: [
+                {
+                    url: shareImage,
+                    alt: newsItem.titulo,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: newsItem.titulo,
+            description,
+            images: [shareImage],
+        },
     };
 }
 

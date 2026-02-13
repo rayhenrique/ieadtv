@@ -38,6 +38,12 @@ YOUTUBE_CHANNEL_ID=
 YOUTUBE_HANDLE=
 ```
 
+Variavel opcional para SEO e prévia de compartilhamento:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://ieadtv.kltecnologia.com
+```
+
 ## Rodar localmente
 
 ```bash

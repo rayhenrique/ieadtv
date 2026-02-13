@@ -1,5 +1,40 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import type { Metadata } from "next";
+
+const SITE_URL =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://ieadtv.kltecnologia.com";
+
+export const metadata: Metadata = {
+    title: "Notícias",
+    description:
+        "Acompanhe as últimas notícias, comunicados e atualizações da Assembleia de Deus em Teotônio Vilela.",
+    alternates: {
+        canonical: "/noticias",
+    },
+    openGraph: {
+        type: "website",
+        url: `${SITE_URL}/noticias`,
+        title: "Notícias | AD Teotônio Vilela",
+        description:
+            "Veja as últimas notícias e comunicados oficiais da AD Teotônio Vilela.",
+        images: [
+            {
+                url: "/images/share-cover.png",
+                width: 1200,
+                height: 630,
+                alt: "Notícias da AD Teotônio Vilela",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Notícias | AD Teotônio Vilela",
+        description:
+            "Veja as últimas notícias e comunicados oficiais da AD Teotônio Vilela.",
+        images: ["/images/share-cover.png"],
+    },
+};
 
 export default async function NoticiasPage() {
     const supabase = await createClient();

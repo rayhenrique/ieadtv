@@ -18,6 +18,7 @@ Este guia cobre deploy de producao para o projeto IEADTV em:
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SITE_URL=https://ieadtv.kltecnologia.com
 ```
 
 Opcional (YouTube):
