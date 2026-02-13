@@ -2,7 +2,7 @@ import { BannerSlider } from "@/components/home/BannerSlider";
 import { getPublicBanners } from "@/lib/actions/banners";
 import { getPublicNews } from "@/lib/actions/noticias";
 import { getPublicEvents } from "@/lib/actions/eventos";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import {
     getYoutubeChannelUrl,
     getYoutubePrimaryStreamVideo,
@@ -43,7 +43,7 @@ export default async function HomePage() {
             getPublicNews(3),
             getPublicEvents(4),
             (async () => {
-                const supabase = await createClient();
+                const supabase = createPublicClient();
                 const { data } = await supabase
                     .from("paginas_estaticas")
                     .select("titulo, conteudo")
@@ -52,7 +52,7 @@ export default async function HomePage() {
                 return data;
             })(),
             (async () => {
-                const supabase = await createClient();
+                const supabase = createPublicClient();
                 const { data } = await supabase
                     .from("paginas_estaticas")
                     .select("titulo, conteudo")
@@ -61,7 +61,7 @@ export default async function HomePage() {
                 return data;
             })(),
             (async () => {
-                const supabase = await createClient();
+                const supabase = createPublicClient();
                 const { data } = await supabase
                     .from("site_settings")
                     .select("value")

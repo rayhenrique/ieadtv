@@ -1,13 +1,13 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
 export default async function PublicLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const supabase = await createClient(); // Use new auth strategy awaiting client
+    const supabase = createPublicClient();
 
     // Fetch site settings
     const { data: settings } = await supabase

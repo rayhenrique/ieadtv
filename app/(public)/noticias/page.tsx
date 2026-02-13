@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Metadata } from "next";
 
 const SITE_URL =
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NoticiasPage() {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const nowIso = new Date().toISOString();
     const { data: noticias } = await supabase
         .from("noticias")

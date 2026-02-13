@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -91,7 +92,7 @@ export async function getNewsItem(slugOrId: string) {
 }
 
 export async function getPublicNews(limit = 3) {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const nowIso = new Date().toISOString();
     const { data, error } = await supabase
         .from("noticias")
@@ -110,7 +111,7 @@ export async function getPublicNews(limit = 3) {
 }
 
 export async function getPublicNewsItem(slug: string) {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const nowIso = new Date().toISOString();
 
     const { data, error } = await supabase

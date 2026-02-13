@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -68,7 +69,7 @@ export async function getEvents() {
 }
 
 export async function getPublicEvents(limit = 4) {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const nowIso = new Date().toISOString();
 
     const { data, error } = await supabase
