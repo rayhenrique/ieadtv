@@ -72,7 +72,30 @@ No CloudPanel, abra o site criado e configure:
 
 Inicie/reinicie a aplicacao pelo CloudPanel.
 
-## 6. SSL (Let's Encrypt)
+## 6. PM2 (opcional, via SSH)
+
+Se preferir gerenciar o processo via terminal (em vez do botao Start/Restart do CloudPanel):
+
+```bash
+cd /home/cloudpanel/htdocs/ieadtv.kltecnologia.com
+sudo npm i -g pm2
+pm2 start npm --name ieadtv -- run start
+pm2 save
+pm2 startup
+```
+
+Depois de executar `pm2 startup`, rode o comando que ele imprimir na tela (normalmente com `sudo`) para habilitar inicializacao automatica no boot.
+
+Comandos uteis:
+
+```bash
+pm2 status
+pm2 logs ieadtv
+pm2 restart ieadtv
+pm2 stop ieadtv
+```
+
+## 7. SSL (Let's Encrypt)
 
 No CloudPanel:
 
@@ -81,7 +104,7 @@ No CloudPanel:
 3. Marque `Issue Certificate` (e `Auto Renew`)
 4. Confirme criacao
 
-## 7. Atualizar em producao
+## 8. Atualizar em producao
 
 Sempre que subir mudancas:
 
@@ -94,7 +117,13 @@ npm run build
 
 Depois, reinicie o processo Node.js no CloudPanel.
 
-## 8. Checklist rapido
+Se estiver usando PM2:
+
+```bash
+pm2 restart ieadtv
+```
+
+## 9. Checklist rapido
 
 - DNS apontando para a VPS
 - Build sem erros (`npm run build`)
