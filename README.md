@@ -17,7 +17,13 @@ Portal institucional e administrativo da Igreja Evangélica Assembleia de Deus e
 
 ## Variaveis de ambiente
 
-Crie o arquivo `.env.local` na raiz do projeto com:
+Use o arquivo `.env.example` como base e crie o `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+Depois, preencha os valores:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
