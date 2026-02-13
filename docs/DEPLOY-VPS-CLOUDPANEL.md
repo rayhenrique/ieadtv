@@ -2,6 +2,8 @@
 
 Guia objetivo para publicar o projeto IEADTV na VPS da Hostinger com CloudPanel, usando o dominio `ieadtv.kltecnologia.com`.
 
+Porta adotada neste guia: `3005`.
+
 ## 1. DNS do dominio
 
 No painel de DNS onde o dominio esta gerenciado:
@@ -31,8 +33,8 @@ No CloudPanel:
 
 ```bash
 ssh root@IP_DA_VPS
-su - cloudpanel
-cd /home/cloudpanel/htdocs/ieadtv.kltecnologia.com
+su - USUARIO_DO_SITE
+cd ~/htdocs/ieadtv.kltecnologia.com
 git clone https://github.com/rayhenrique/ieadtv.git .
 npm ci
 ```
@@ -66,20 +68,23 @@ npm run build
 
 No CloudPanel, abra o site criado e configure:
 
-- App Root: `/home/cloudpanel/htdocs/ieadtv.kltecnologia.com`
-- Start Command: `npm run start`
-- Port: `3000`
+- App Root: `/home/USUARIO_DO_SITE/htdocs/ieadtv.kltecnologia.com`
+- Start Command: `npm run start -- -p 3005`
+- Port: `3005`
 
 Inicie/reinicie a aplicacao pelo CloudPanel.
+
+Importante: use apenas um gerenciador de processo por vez (`CloudPanel` ou `PM2`).
 
 ## 6. PM2 (opcional, via SSH)
 
 Se preferir gerenciar o processo via terminal (em vez do botao Start/Restart do CloudPanel):
 
 ```bash
-cd /home/cloudpanel/htdocs/ieadtv.kltecnologia.com
-sudo npm i -g pm2
-pm2 start npm --name ieadtv -- run start
+cd ~/htdocs/ieadtv.kltecnologia.com
+npm install pm2@latest -g
+pm2 delete ieadtv
+pm2 start npm --name ieadtv -- run start -- -p 3005
 pm2 save
 pm2 startup
 ```
@@ -109,7 +114,7 @@ No CloudPanel:
 Sempre que subir mudancas:
 
 ```bash
-cd /home/cloudpanel/htdocs/ieadtv.kltecnologia.com
+cd ~/htdocs/ieadtv.kltecnologia.com
 git pull origin main
 npm ci
 npm run build
@@ -120,13 +125,28 @@ Depois, reinicie o processo Node.js no CloudPanel.
 Se estiver usando PM2:
 
 ```bash
-pm2 restart ieadtv
+pm2 restart ieadtv --update-env
 ```
 
-## 9. Checklist rapido
+## 9. Troubleshooting
+
+Erro `EADDRINUSE: address already in use :::3000` ou `:::3005`:
+
+1. Existe outro processo ocupando a porta.
+2. Ou voce iniciou pelo CloudPanel e PM2 ao mesmo tempo.
+
+Correcao rapida (PM2):
+
+```bash
+pm2 delete ieadtv
+pm2 start npm --name ieadtv -- run start -- -p 3005
+pm2 save
+```
+
+## 10. Checklist rapido
 
 - DNS apontando para a VPS
 - Build sem erros (`npm run build`)
 - `.env.local` preenchido
-- App iniciando em `npm run start`
+- App iniciando na porta `3005`
 - SSL ativo em `https://ieadtv.kltecnologia.com`
