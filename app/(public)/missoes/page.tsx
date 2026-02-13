@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export default async function MissoesPage() {
     const supabase = await createClient();
+    const nowIso = new Date().toISOString();
 
     // Buscar a categoria "Missão" ou "Missões"
     const { data: categoria } = await supabase
@@ -19,7 +20,8 @@ export default async function MissoesPage() {
             .select("*, categorias(nome)")
             .eq("publicado", true)
             .eq("categoria_id", categoria.id)
-            .order("published_at", { ascending: false });
+            .or(`published_at.is.null,published_at.lte.${nowIso}`)
+            .order("published_at", { ascending: false, nullsFirst: false });
         noticias = data || [];
     }
 

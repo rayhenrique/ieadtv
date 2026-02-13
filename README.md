@@ -80,3 +80,26 @@ O sistema usa autenticacao do Supabase.
 Manual completo de deploy:
 
 - `docs/DEPLOY.md`
+- `docs/DEPLOY-VPS-CLOUDPANEL.md`
+
+## Fluxo Git e Deploy rapido
+
+No computador local (subir alteracoes para o GitHub):
+
+```bash
+git status
+git add .
+git commit -m "sua mensagem de commit"
+git pull --rebase origin main
+git push origin main
+```
+
+Na VPS (baixar e publicar):
+
+```bash
+cd ~/htdocs/ieadtv.kltecnologia.com
+git pull origin main
+npm ci
+npm run build
+pm2 restart ieadtv --update-env
+```

@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function NewsPage() {
     const news = await getNews();
+    const now = Date.now();
 
     return (
         <div className="p-6 max-w-[1200px] mx-auto">
@@ -103,7 +104,13 @@ export default async function NewsPage() {
                                             </span>
                                         </td>
                                         <td className="py-4 px-6">
-                                            {item.publicado ? (
+                                            {item.publicado &&
+                                            item.published_at &&
+                                            new Date(item.published_at).getTime() > now ? (
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Programada
+                                                </span>
+                                            ) : item.publicado ? (
                                                 <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                                                     Publicado
                                                 </span>
@@ -115,6 +122,11 @@ export default async function NewsPage() {
                                             {item.destaque && (
                                                 <span className="ml-2 text-xs text-amber-500 font-bold" title="Destaque">★</span>
                                             )}
+                                            <p className="mt-1 text-[11px] text-gray-500">
+                                                {item.published_at
+                                                    ? new Date(item.published_at).toLocaleString("pt-BR")
+                                                    : "Sem data de publicação"}
+                                            </p>
                                         </td>
                                         <td className="py-4 px-6 text-right">
                                             <NewsActions

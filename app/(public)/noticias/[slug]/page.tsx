@@ -1,8 +1,9 @@
-import { getNewsItem } from "@/lib/actions/noticias";
+import { getPublicNewsItem } from "@/lib/actions/noticias";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, Tag, User, ArrowLeft, ExternalLink, Image as ImageIcon } from "lucide-react";
+import { Calendar, User, ArrowLeft, ExternalLink, Image as ImageIcon } from "lucide-react";
+import { NewsGalleryCarousel } from "@/components/news/NewsGalleryCarousel";
 
 interface NewsDetailPageProps {
     params: {
@@ -14,7 +15,7 @@ export const revalidate = 60;
 
 export async function generateMetadata({ params }: NewsDetailPageProps) {
     const { slug } = await params
-    const newsItem = await getNewsItem(slug);
+    const newsItem = await getPublicNewsItem(slug);
 
     if (!newsItem) {
         return {
@@ -30,11 +31,15 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
 
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     const { slug } = await params
-    const newsItem = await getNewsItem(slug);
+    const newsItem = await getPublicNewsItem(slug);
 
     if (!newsItem) {
         notFound();
     }
+
+    const renderedContent = newsItem.conteudo.includes("<")
+        ? newsItem.conteudo
+        : newsItem.conteudo.replace(/\n/g, "<br/>");
 
     return (
         <article className="min-h-screen bg-gray-50 pb-16">
@@ -97,7 +102,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             <div className="mx-auto max-w-[800px] px-4 sm:px-6 py-12">
                 <div
                     className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-gray-100"
-                    dangerouslySetInnerHTML={{ __html: newsItem.conteudo.replace(/\n/g, "<br/>") }}
+                    dangerouslySetInnerHTML={{ __html: renderedContent }}
                 />
 
                 {/* External Link Button */}
@@ -115,7 +120,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                     </div>
                 )}
 
-                {/* Photo Gallery (Carousel Placeholder for MVP - just grid for now to verify) */}
+                {/* Galeria de Fotos em carrossel com ampliação */}
                 {newsItem.galeria_fotos && newsItem.galeria_fotos.length > 0 && (
                     <div className="mt-16 pt-16 border-t border-gray-200">
                         <div className="flex items-center gap-2 mb-6">
@@ -123,18 +128,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                             <h2 className="text-2xl font-bold text-gray-900">Galeria de Fotos</h2>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {newsItem.galeria_fotos.map((foto, idx) => (
-                                <div key={idx} className="relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer group">
-                                    <Image
-                                        src={foto}
-                                        alt={`Foto ${idx + 1}`}
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                </div>
-                            ))}
-                        </div>
+                        <NewsGalleryCarousel images={newsItem.galeria_fotos} />
                     </div>
                 )}
             </div>

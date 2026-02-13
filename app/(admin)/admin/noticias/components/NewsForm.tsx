@@ -3,9 +3,22 @@
 import { createNews, updateNews, News } from "@/lib/actions/noticias";
 import { Category } from "@/lib/actions/categorias";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { Loader2, AlertCircle, Upload, X, Image as ImageIcon } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import {
+    Loader2,
+    AlertCircle,
+    Upload,
+    X,
+    Bold,
+    Italic,
+    Underline,
+    List,
+    ListOrdered,
+    Link as LinkIcon,
+    Heading2,
+    Heading3,
+    Image as ImageIcon,
+} from "lucide-react";
 import Image from "next/image";
 
 interface NewsFormProps {
@@ -26,18 +39,166 @@ function slugify(text: string) {
         .replace(/-+$/, "");
 }
 
+function toInputDateTime(value?: string | null) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+
+    const pad = (num: number) => String(num).padStart(2, "0");
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hour = pad(date.getHours());
+    const minute = pad(date.getMinutes());
+
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+}
+
+function ToolbarButton({
+    onClick,
+    title,
+    children,
+}: {
+    onClick: () => void;
+    title: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            title={title}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900"
+        >
+            {children}
+        </button>
+    );
+}
+
+function RichTextEditor({
+    value,
+    onChange,
+}: {
+    value: string;
+    onChange: (nextValue: string) => void;
+}) {
+    const editorRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (!editorRef.current) return;
+        if (editorRef.current.innerHTML !== value) {
+            editorRef.current.innerHTML = value || "";
+        }
+    }, [value]);
+
+    const runCommand = (command: string, commandValue?: string) => {
+        if (!editorRef.current) return;
+        editorRef.current.focus();
+        document.execCommand(command, false, commandValue);
+        onChange(editorRef.current.innerHTML);
+    };
+
+    const insertLink = () => {
+        const url = prompt("Digite a URL do link:");
+        if (!url) return;
+        runCommand("createLink", url);
+    };
+
+    const insertImageByUrl = () => {
+        const url = prompt("Digite a URL da imagem:");
+        if (!url) return;
+        runCommand("insertImage", url);
+    };
+
+    return (
+        <div className="rounded-md border border-gray-300 bg-white">
+            <div className="flex flex-wrap gap-2 border-b border-gray-200 p-3">
+                <ToolbarButton
+                    title="Negrito"
+                    onClick={() => runCommand("bold")}
+                >
+                    <Bold className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Itálico"
+                    onClick={() => runCommand("italic")}
+                >
+                    <Italic className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Sublinhado"
+                    onClick={() => runCommand("underline")}
+                >
+                    <Underline className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Título H2"
+                    onClick={() => runCommand("formatBlock", "<h2>")}
+                >
+                    <Heading2 className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Título H3"
+                    onClick={() => runCommand("formatBlock", "<h3>")}
+                >
+                    <Heading3 className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Lista"
+                    onClick={() => runCommand("insertUnorderedList")}
+                >
+                    <List className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Lista ordenada"
+                    onClick={() => runCommand("insertOrderedList")}
+                >
+                    <ListOrdered className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Inserir link"
+                    onClick={insertLink}
+                >
+                    <LinkIcon className="h-4 w-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    title="Inserir imagem por URL"
+                    onClick={insertImageByUrl}
+                >
+                    <ImageIcon className="h-4 w-4" />
+                </ToolbarButton>
+            </div>
+
+            <div
+                ref={editorRef}
+                contentEditable
+                suppressContentEditableWarning
+                className="min-h-[320px] w-full p-4 text-sm text-gray-900 focus:outline-none"
+                onInput={(event) =>
+                    onChange((event.target as HTMLDivElement).innerHTML)
+                }
+                onBlur={(event) =>
+                    onChange((event.target as HTMLDivElement).innerHTML)
+                }
+            />
+        </div>
+    );
+}
+
 export function NewsForm({ initialData, categories }: NewsFormProps) {
-    const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string>("");
     const [titulo, setTitulo] = useState(initialData?.titulo || "");
     const [slug, setSlug] = useState(initialData?.slug || "");
+    const [conteudo, setConteudo] = useState(initialData?.conteudo || "");
+    const [publicationDate, setPublicationDate] = useState(
+        toInputDateTime(initialData?.published_at)
+    );
     const [preview, setPreview] = useState<string>(initialData?.imagem_capa_url || "");
 
     // Gallery state
     const [existingGallery, setExistingGallery] = useState<string[]>(initialData?.galeria_fotos || []);
     const [newGalleryPreviews, setNewGalleryPreviews] = useState<string[]>([]);
-    const [newGalleryFiles, setNewGalleryFiles] = useState<File[]>([]); // To track files for UI clearing if needed, but simple file input handles it mostly. Actually for preview we need to manage.
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newTitle = e.target.value;
@@ -74,6 +235,14 @@ export function NewsForm({ initialData, categories }: NewsFormProps) {
 
     const handleSubmit = async (formData: FormData) => {
         setError("");
+
+        if (!conteudo.replace(/<[^>]*>/g, "").trim()) {
+            setError("O conteúdo da notícia não pode ficar vazio.");
+            return;
+        }
+
+        formData.set("conteudo", conteudo);
+        formData.set("published_at", publicationDate);
 
         // Append existing gallery URLs to keep
         existingGallery.forEach(url => {
@@ -251,6 +420,27 @@ export function NewsForm({ initialData, categories }: NewsFormProps) {
                                 Destacar na Home
                             </label>
                         </div>
+
+                        <div>
+                            <label
+                                htmlFor="published_at"
+                                className="mb-1 block text-sm font-medium text-gray-700"
+                            >
+                                Data de Publicação
+                            </label>
+                            <input
+                                id="published_at"
+                                name="published_at"
+                                type="datetime-local"
+                                value={publicationDate}
+                                onChange={(e) => setPublicationDate(e.target.value)}
+                                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            />
+                            <p className="mt-1 text-xs text-gray-500">
+                                Se for data futura, a notícia ficará programada. Se for retroativa,
+                                aparecerá com essa data.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -259,16 +449,15 @@ export function NewsForm({ initialData, categories }: NewsFormProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                     Conteúdo da Notícia
                 </label>
-                <textarea
+                <input
+                    type="hidden"
                     name="conteudo"
-                    defaultValue={initialData?.conteudo || ""}
-                    rows={15}
-                    required
-                    placeholder="Escreva o conteúdo da notícia aqui (HTML básico ou Texto)..."
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 font-sans"
+                    value={conteudo}
+                    readOnly
                 />
+                <RichTextEditor value={conteudo} onChange={setConteudo} />
                 <p className="text-xs text-gray-500 mt-1">
-                    Dica: Use parágrafos para separar o texto.
+                    Use a barra de ferramentas para formatar o texto.
                 </p>
             </div>
 

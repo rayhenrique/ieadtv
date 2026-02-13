@@ -111,16 +111,27 @@ No CloudPanel:
 
 ## 8. Atualizar em producao
 
-Sempre que subir mudancas:
+No seu computador local (commit + push para GitHub):
+
+```bash
+git status
+git add .
+git commit -m "sua mensagem de commit"
+git pull --rebase origin main
+git push origin main
+```
+
+Na VPS, para publicar a atualizacao:
 
 ```bash
 cd ~/htdocs/ieadtv.kltecnologia.com
 git pull origin main
 npm ci
 npm run build
+pm2 restart ieadtv --update-env
 ```
 
-Depois, reinicie o processo Node.js no CloudPanel.
+Se usar CloudPanel (sem PM2), troque a ultima linha por restart no painel.
 
 Se estiver usando PM2:
 

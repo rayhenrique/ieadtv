@@ -3,11 +3,13 @@ import { createClient } from "@/lib/supabase/server";
 
 export default async function NoticiasPage() {
     const supabase = await createClient();
+    const nowIso = new Date().toISOString();
     const { data: noticias } = await supabase
         .from("noticias")
         .select("*, categorias(nome)")
         .eq("publicado", true)
-        .order("published_at", { ascending: false });
+        .or(`published_at.is.null,published_at.lte.${nowIso}`)
+        .order("published_at", { ascending: false, nullsFirst: false });
 
     return (
         <div className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6">

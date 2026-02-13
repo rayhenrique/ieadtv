@@ -39,6 +39,16 @@ function slugify(text: string) {
         .replace(/-+$/, "");
 }
 
+function parsePublicationDate(input: FormDataEntryValue | null) {
+    const value = typeof input === "string" ? input.trim() : "";
+    if (!value) return null;
+
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return undefined;
+
+    return parsed.toISOString();
+}
+
 export async function getNews() {
     const supabase = await createClient();
     const { data, error } = await supabase
@@ -82,11 +92,13 @@ export async function getNewsItem(slugOrId: string) {
 
 export async function getPublicNews(limit = 3) {
     const supabase = await createClient();
+    const nowIso = new Date().toISOString();
     const { data, error } = await supabase
         .from("noticias")
         .select("*, categorias(nome, slug)")
         .eq("publicado", true)
-        .order("created_at", { ascending: false })
+        .or(`published_at.is.null,published_at.lte.${nowIso}`)
+        .order("published_at", { ascending: false, nullsFirst: false })
         .limit(limit);
 
     if (error) {
@@ -95,6 +107,22 @@ export async function getPublicNews(limit = 3) {
     }
 
     return data as News[];
+}
+
+export async function getPublicNewsItem(slug: string) {
+    const supabase = await createClient();
+    const nowIso = new Date().toISOString();
+
+    const { data, error } = await supabase
+        .from("noticias")
+        .select("*, categorias(nome, slug)")
+        .eq("slug", slug)
+        .eq("publicado", true)
+        .or(`published_at.is.null,published_at.lte.${nowIso}`)
+        .single();
+
+    if (error) return null;
+    return data as News;
 }
 
 export async function createNews(formData: FormData) {
@@ -116,6 +144,12 @@ export async function createNews(formData: FormData) {
     const link_fotos = formData.get("link_fotos") as string;
     const publicado = formData.get("publicado") === "on";
     const destaque = formData.get("destaque") === "on";
+    const publicationDateInput = formData.get("published_at");
+    const parsedPublicationDate = parsePublicationDate(publicationDateInput);
+
+    if (parsedPublicationDate === undefined) {
+        return { error: "Data de publicação inválida." };
+    }
 
     // Handle Cover Image
     const file = formData.get("imagem_capa") as File;
@@ -179,7 +213,9 @@ export async function createNews(formData: FormData) {
         publicado,
         destaque,
         autor: "Admin",
-        published_at: publicado ? new Date().toISOString() : null,
+        published_at: publicado
+            ? parsedPublicationDate || new Date().toISOString()
+            : parsedPublicationDate || null,
     });
 
     if (error) {
@@ -191,6 +227,9 @@ export async function createNews(formData: FormData) {
     }
 
     revalidatePath("/admin/noticias");
+    revalidatePath("/noticias");
+    revalidatePath("/missoes");
+    revalidatePath("/");
     redirect("/admin/noticias");
 }
 
@@ -210,6 +249,12 @@ export async function updateNews(id: string, formData: FormData) {
     const link_fotos = formData.get("link_fotos") as string;
     const publicado = formData.get("publicado") === "on";
     const destaque = formData.get("destaque") === "on";
+    const publicationDateInput = formData.get("published_at");
+    const parsedPublicationDate = parsePublicationDate(publicationDateInput);
+
+    if (parsedPublicationDate === undefined) {
+        return { error: "Data de publicação inválida." };
+    }
 
     // Reconstruct existing gallery from hidden inputs
     const existingGallery = formData.getAll("galeria_existente") as string[];
@@ -224,6 +269,9 @@ export async function updateNews(id: string, formData: FormData) {
         link_fotos: link_fotos || null,
         publicado,
         destaque,
+        published_at: publicado
+            ? parsedPublicationDate || new Date().toISOString()
+            : parsedPublicationDate || null,
         updated_at: new Date().toISOString(),
     };
 
@@ -286,6 +334,9 @@ export async function updateNews(id: string, formData: FormData) {
     }
 
     revalidatePath("/admin/noticias");
+    revalidatePath("/noticias");
+    revalidatePath("/missoes");
+    revalidatePath("/");
     redirect("/admin/noticias");
 }
 
@@ -304,4 +355,7 @@ export async function deleteNews(id: string) {
     }
 
     revalidatePath("/admin/noticias");
+    revalidatePath("/noticias");
+    revalidatePath("/missoes");
+    revalidatePath("/");
 }

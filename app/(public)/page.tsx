@@ -168,7 +168,7 @@ export default async function HomePage() {
                                             {item.resumo}
                                         </p>
                                         <div className="mt-auto pt-4 text-xs text-gray-400">
-                                            {new Date(item.created_at).toLocaleDateString('pt-BR')}
+                                            {new Date(item.published_at || item.created_at).toLocaleDateString('pt-BR')}
                                         </div>
                                     </div>
                                 </Link>

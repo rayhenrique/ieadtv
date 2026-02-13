@@ -51,7 +51,7 @@ export function BannerSlider({ banners }: BannerSliderProps) {
         <div className="relative group">
             <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex">
-                    {banners.map((banner) => (
+                    {banners.map((banner, index) => (
                         <div className="relative flex-[0_0_100%] min-w-0" key={banner.id}>
                             {/* Aspect Ratio Container for Responsive Height */}
                             <div className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]">
@@ -70,14 +70,25 @@ export function BannerSlider({ banners }: BannerSliderProps) {
                                 {/* Content */}
                                 <div className="absolute inset-0 flex items-end justify-center pb-12 sm:pb-16 px-4 md:px-0">
                                     <div className="w-full max-w-[1200px] text-center md:text-left md:px-6">
-                                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white drop-shadow-lg mb-4 opacity-0 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards" style={{ animationDelay: '0.2s' }}>
+                                        <h2
+                                            className={cn(
+                                                "mb-4 text-2xl font-bold text-white drop-shadow-lg transition-all duration-500 sm:text-3xl md:text-5xl",
+                                                index === selectedIndex
+                                                    ? "translate-y-0 opacity-100"
+                                                    : "translate-y-2 opacity-0"
+                                            )}
+                                        >
                                             {banner.titulo}
                                         </h2>
                                         {banner.link_destino && (
                                             <Link
                                                 href={banner.link_destino}
-                                                className="inline-flex items-center justify-center rounded-md bg-white text-[#003366] px-6 py-2.5 text-sm font-bold uppercase tracking-wide transition-transform hover:scale-105 hover:bg-gray-100 shadow-xl opacity-0 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards"
-                                                style={{ animationDelay: '0.4s' }}
+                                                className={cn(
+                                                    "inline-flex items-center justify-center rounded-md bg-white px-6 py-2.5 text-sm font-bold uppercase tracking-wide text-[#003366] shadow-xl transition-all duration-500 hover:scale-105 hover:bg-gray-100",
+                                                    index === selectedIndex
+                                                        ? "translate-y-0 opacity-100"
+                                                        : "translate-y-2 opacity-0"
+                                                )}
                                             >
                                                 Saiba Mais
                                             </Link>
