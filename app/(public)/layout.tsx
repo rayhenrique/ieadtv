@@ -2,6 +2,11 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { createPublicClient } from "@/lib/supabase/public";
 
+type SiteSetting = {
+    key: string;
+    value: string | null;
+};
+
 export default async function PublicLayout({
     children,
 }: {
@@ -10,13 +15,14 @@ export default async function PublicLayout({
     const supabase = createPublicClient();
 
     // Fetch site settings
-    const { data: settings } = await supabase
+    const { data } = await supabase
         .from("site_settings")
         .select("key, value");
+    const settings = (data ?? []) as SiteSetting[];
 
     // helper to get value
     const getValue = (key: string) =>
-        settings?.find((s) => s.key === key)?.value || "#";
+        settings.find((setting) => setting.key === key)?.value || "#";
 
     const socialLinks = {
         facebook: getValue("social_facebook"),

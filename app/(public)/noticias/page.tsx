@@ -2,6 +2,19 @@ import Link from "next/link";
 import { createPublicClient } from "@/lib/supabase/public";
 import type { Metadata } from "next";
 
+type NewsListItem = {
+    id: string;
+    slug: string;
+    titulo: string;
+    resumo: string | null;
+    imagem_capa_url: string | null;
+    published_at: string | null;
+    created_at: string;
+    categorias?: {
+        nome: string;
+    } | null;
+};
+
 const SITE_URL =
     process.env.NEXT_PUBLIC_SITE_URL || "https://ieadtv.kltecnologia.com";
 
@@ -39,12 +52,13 @@ export const metadata: Metadata = {
 export default async function NoticiasPage() {
     const supabase = createPublicClient();
     const nowIso = new Date().toISOString();
-    const { data: noticias } = await supabase
+    const { data } = await supabase
         .from("noticias")
         .select("*, categorias(nome)")
         .eq("publicado", true)
         .or(`published_at.is.null,published_at.lte.${nowIso}`)
         .order("published_at", { ascending: false, nullsFirst: false });
+    const noticias = (data ?? []) as NewsListItem[];
 
     return (
         <div className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6">

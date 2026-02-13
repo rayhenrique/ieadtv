@@ -16,6 +16,15 @@ import { CalendarDays, FileText, MapPin, Radio } from "lucide-react";
 
 export const revalidate = 60; // Revalidate every minute
 
+type StaticPageSection = {
+    titulo: string | null;
+    conteudo: string | null;
+};
+
+type SiteSettingValue = {
+    value: string | null;
+};
+
 const HOME_ADDRESS_SLUG = "home-templo-endereco";
 const HOME_SCHEDULE_SLUG = "home-templo-horarios";
 
@@ -49,7 +58,7 @@ export default async function HomePage() {
                     .select("titulo, conteudo")
                     .eq("slug", HOME_ADDRESS_SLUG)
                     .maybeSingle();
-                return data;
+                return data as StaticPageSection | null;
             })(),
             (async () => {
                 const supabase = createPublicClient();
@@ -58,7 +67,7 @@ export default async function HomePage() {
                     .select("titulo, conteudo")
                     .eq("slug", HOME_SCHEDULE_SLUG)
                     .maybeSingle();
-                return data;
+                return data as StaticPageSection | null;
             })(),
             (async () => {
                 const supabase = createPublicClient();
@@ -67,10 +76,12 @@ export default async function HomePage() {
                     .select("value")
                     .eq("key", "social_youtube")
                     .maybeSingle();
+                const youtubeSetting = data as SiteSettingValue | null;
 
                 const youtubeUrl =
-                    data?.value && /^https?:\/\//i.test(data.value.trim())
-                        ? data.value.trim()
+                    youtubeSetting?.value &&
+                    /^https?:\/\//i.test(youtubeSetting.value.trim())
+                        ? youtubeSetting.value.trim()
                         : null;
                 const channelId = await resolveYoutubeChannelId(youtubeUrl);
                 const videos = await getYoutubeRecentVideos({
