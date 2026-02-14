@@ -1,6 +1,16 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
+interface MissionNewsItem {
+    id: string;
+    slug: string;
+    titulo: string;
+    resumo: string | null;
+    imagem_capa_url: string | null;
+    published_at: string | null;
+    created_at: string;
+}
+
 export default async function MissoesPage() {
     const supabase = await createClient();
     const nowIso = new Date().toISOString();
@@ -12,7 +22,7 @@ export default async function MissoesPage() {
         .or("slug.eq.missao,slug.eq.missoes")
         .single();
 
-    let noticias: any[] = [];
+    let noticias: MissionNewsItem[] = [];
 
     if (categoria) {
         const { data } = await supabase
@@ -22,7 +32,7 @@ export default async function MissoesPage() {
             .eq("categoria_id", categoria.id)
             .or(`published_at.is.null,published_at.lte.${nowIso}`)
             .order("published_at", { ascending: false, nullsFirst: false });
-        noticias = data || [];
+        noticias = (data || []) as MissionNewsItem[];
     }
 
     return (

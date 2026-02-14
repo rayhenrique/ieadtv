@@ -1,5 +1,8 @@
 import { getAdminUsers } from "@/lib/actions/usuarios";
 import { UserCreateForm } from "./components/UserCreateForm";
+import { UserRoleActions } from "./components/UserRoleActions";
+
+export const dynamic = "force-dynamic";
 
 function formatDate(value: string | null) {
     if (!value) return "—";
@@ -46,18 +49,29 @@ export default async function AdminUsersPage() {
                                 <tr>
                                     <th className="px-6 py-3 text-left font-medium text-gray-600">Nome</th>
                                     <th className="px-6 py-3 text-left font-medium text-gray-600">E-mail</th>
+                                    <th className="px-6 py-3 text-left font-medium text-gray-600">Papel</th>
                                     <th className="px-6 py-3 text-left font-medium text-gray-600">Criado Em</th>
                                     <th className="px-6 py-3 text-left font-medium text-gray-600">Último Acesso</th>
                                     <th className="px-6 py-3 text-left font-medium text-gray-600">Status</th>
+                                    <th className="px-6 py-3 text-left font-medium text-gray-600">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {users.map((user) => (
                                     <tr key={user.id} className="border-t border-border">
-                                        <td className="px-6 py-3 text-foreground">
-                                            {user.nome || "—"}
-                                        </td>
+                                        <td className="px-6 py-3 text-foreground">{user.nome || "—"}</td>
                                         <td className="px-6 py-3 text-foreground">{user.email}</td>
+                                        <td className="px-6 py-3">
+                                            <span
+                                                className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                                                    user.role === "admin"
+                                                        ? "bg-blue-100 text-blue-700"
+                                                        : "bg-gray-100 text-gray-700"
+                                                }`}
+                                            >
+                                                {user.role === "admin" ? "Administrador" : "Operador"}
+                                            </span>
+                                        </td>
                                         <td className="px-6 py-3 text-muted-foreground">
                                             {formatDate(user.created_at)}
                                         </td>
@@ -74,6 +88,9 @@ export default async function AdminUsersPage() {
                                             >
                                                 {user.email_confirmed_at ? "Ativo" : "Pendente"}
                                             </span>
+                                        </td>
+                                        <td className="px-6 py-3">
+                                            <UserRoleActions userId={user.id} role={user.role} />
                                         </td>
                                     </tr>
                                 ))}

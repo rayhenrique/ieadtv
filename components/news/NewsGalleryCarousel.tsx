@@ -16,7 +16,6 @@ export function NewsGalleryCarousel({ images }: NewsGalleryCarouselProps) {
         loop: false,
     });
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
     const onSelect = useCallback(() => {
@@ -26,8 +25,6 @@ export function NewsGalleryCarousel({ images }: NewsGalleryCarouselProps) {
 
     useEffect(() => {
         if (!emblaApi) return;
-        setScrollSnaps(emblaApi.scrollSnapList());
-        onSelect();
         emblaApi.on("select", onSelect);
         emblaApi.on("reInit", onSelect);
     }, [emblaApi, onSelect]);
@@ -44,19 +41,23 @@ export function NewsGalleryCarousel({ images }: NewsGalleryCarouselProps) {
         setLightboxIndex(index);
     };
 
-    const closeLightbox = () => {
+    const closeLightbox = useCallback(() => {
         setLightboxIndex(null);
-    };
+    }, []);
 
-    const goToPreviousImage = () => {
-        if (lightboxIndex === null) return;
-        setLightboxIndex((lightboxIndex - 1 + images.length) % images.length);
-    };
+    const goToPreviousImage = useCallback(() => {
+        setLightboxIndex((prev) =>
+            prev === null ? prev : (prev - 1 + images.length) % images.length
+        );
+    }, [images.length]);
 
-    const goToNextImage = () => {
-        if (lightboxIndex === null) return;
-        setLightboxIndex((lightboxIndex + 1) % images.length);
-    };
+    const goToNextImage = useCallback(() => {
+        setLightboxIndex((prev) =>
+            prev === null ? prev : (prev + 1) % images.length
+        );
+    }, [images.length]);
+
+    const scrollSnaps = emblaApi?.scrollSnapList() || [];
 
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
@@ -68,7 +69,7 @@ export function NewsGalleryCarousel({ images }: NewsGalleryCarouselProps) {
 
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [lightboxIndex]);
+    }, [closeLightbox, goToNextImage, goToPreviousImage, lightboxIndex]);
 
     if (images.length === 0) return null;
 

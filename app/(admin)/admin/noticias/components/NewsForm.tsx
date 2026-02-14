@@ -352,7 +352,7 @@ export function NewsForm({ initialData, categories }: NewsFormProps) {
                             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                            Opcional. Exibirá um botão "Ver Fotos" na notícia.
+                            Opcional. Exibirá um botão &quot;Ver Fotos&quot; na notícia.
                         </p>
                     </div>
                 </div>

@@ -13,8 +13,10 @@ import {
     PenSquare,
     Clock3,
     Wallet,
+    ShieldCheck,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentUserWithRole } from "@/lib/auth/roles";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +47,8 @@ function formatCurrency(value: number) {
 }
 
 export default async function AdminDashboardPage() {
+    const auth = await getCurrentUserWithRole();
+    const role = auth.role;
     const supabase = await createClient();
     const nowIso = new Date().toISOString();
     const queryErrors: string[] = [];
@@ -246,6 +250,16 @@ export default async function AdminDashboardPage() {
             icon: FileText,
         },
     ];
+
+    if (role === "admin") {
+        principaisMetricas.push({
+            label: "Auditoria",
+            value: "Logs",
+            description: "Rastreamento de ações",
+            href: "/admin/auditoria",
+            icon: ShieldCheck,
+        });
+    }
 
     const metricasOperacionais: DashboardMetric[] = [
         {

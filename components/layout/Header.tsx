@@ -92,16 +92,27 @@ export function Header({ socialLinks }: HeaderProps) {
                     <div className="flex flex-col items-end gap-2 md:flex-row md:items-center md:gap-6">
                         {/* Busca */}
                         <div className="w-[200px] md:w-full md:max-w-sm lg:max-w-md">
-                            <div className="flex w-full overflow-hidden rounded-md shadow-xl">
+                            <form
+                                action="/busca"
+                                method="get"
+                                className="flex w-full overflow-hidden rounded-md shadow-xl"
+                                role="search"
+                                aria-label="Buscar no site"
+                            >
                                 <input
+                                    name="q"
                                     type="text"
-                                    placeholder="Buscar..."
+                                    placeholder="Buscar notícias, eventos, congregações..."
                                     className="h-8 w-full bg-white px-3 text-xs text-gray-700 outline-none placeholder:text-gray-400 focus:bg-gray-50 md:h-10 md:px-4 md:text-sm"
                                 />
-                                <button className="flex h-8 w-8 items-center justify-center bg-[#003366] text-white transition-colors hover:bg-[#002244] md:h-10 md:w-12">
+                                <button
+                                    type="submit"
+                                    className="flex h-8 w-8 items-center justify-center bg-[#003366] text-white transition-colors hover:bg-[#002244] md:h-10 md:w-12"
+                                    aria-label="Executar busca"
+                                >
                                     <Search className="h-4 w-4 md:h-5 md:w-5" />
                                 </button>
-                            </div>
+                            </form>
                         </div>
 
                         {/* Redes Sociais */}

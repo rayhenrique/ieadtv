@@ -107,7 +107,7 @@ export default async function HomePage() {
             {/* Hero / Banners */}
             <section className="home-section home-section-surface w-full bg-surface">
                 {banners && banners.length > 0 ? (
-                    <BannerSlider banners={banners as any} />
+                    <BannerSlider banners={banners} />
                 ) : (
                     <div className="home-section-container mx-auto max-w-[1200px] px-4 py-16 sm:px-6">
                         <div className="home-lift-card flex h-[400px] items-center justify-center rounded-lg border border-border bg-white shadow-sm">

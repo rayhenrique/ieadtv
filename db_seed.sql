@@ -1,3 +1,6 @@
+-- RBAC NOTICE:
+-- Run db/rbac_audit.sql before this seed to enable role-aware policies.
+
 -- 1. Cria a tabela de banners se não existir
 CREATE TABLE IF NOT EXISTS public.banners (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -15,15 +18,17 @@ ALTER TABLE public.banners ENABLE ROW LEVEL SECURITY;
 -- 3. Define Políticas de Acesso
 -- Permitir leitura pública
 DROP POLICY IF EXISTS "Public banners are viewable by everyone" ON public.banners;
-CREATE POLICY "Public banners are viewable by everyone" 
-ON public.banners FOR SELECT 
+CREATE POLICY "Public banners are viewable by everyone"
+ON public.banners FOR SELECT
 USING (true);
 
--- Permitir modificação apenas para usuários autenticados (Admin)
-DROP POLICY IF EXISTS "Authenticated users can modify banners" ON public.banners;
-CREATE POLICY "Authenticated users can modify banners" 
-ON public.banners FOR ALL 
-USING (auth.role() = 'authenticated');
+-- Permitir modificação para backoffice (admin/operador)
+DROP POLICY IF EXISTS "Backoffice users can modify banners" ON public.banners;
+CREATE POLICY "Backoffice users can modify banners"
+ON public.banners FOR ALL
+TO authenticated
+USING (public.current_user_role() IS NOT NULL)
+WITH CHECK (public.current_user_role() IS NOT NULL);
 
 -- 4. Inserir Dados de Exemplo (Banners)
 INSERT INTO public.banners (titulo, imagem_url, link_destino, ativo, ordem) VALUES

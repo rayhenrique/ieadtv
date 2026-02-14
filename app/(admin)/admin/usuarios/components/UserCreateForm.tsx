@@ -54,7 +54,7 @@ export function UserCreateForm() {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div className="md:col-span-1">
                     <label className="mb-1 block text-sm font-medium text-gray-700">
                         Nome (Opcional)
@@ -91,6 +91,20 @@ export function UserCreateForm() {
                         placeholder="Mínimo 6 caracteres"
                         className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                     />
+                </div>
+
+                <div className="md:col-span-1">
+                    <label className="mb-1 block text-sm font-medium text-gray-700">
+                        Papel
+                    </label>
+                    <select
+                        name="role"
+                        defaultValue="operador"
+                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    >
+                        <option value="operador">Operador</option>
+                        <option value="admin">Administrador</option>
+                    </select>
                 </div>
             </div>
 

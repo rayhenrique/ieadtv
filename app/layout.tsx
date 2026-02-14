@@ -86,7 +86,10 @@ export default function RootLayout({
 
   return (
     <html lang="pt-BR" className="light">
-      <body className={`${geistSans.variable} font-sans antialiased`}>
+      <body
+        suppressHydrationWarning
+        className={`${geistSans.variable} font-sans antialiased`}
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
