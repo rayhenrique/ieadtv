@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAuditLogs } from "@/lib/actions/auditoria";
 import { AuditCleanupButton } from "./components/AuditCleanupButton";
+import { getSingleQueryValue } from "@/lib/search/query-params";
 
 export const dynamic = "force-dynamic";
 
@@ -158,21 +159,28 @@ function shortId(value: string) {
 }
 
 interface AuditPageProps {
-    searchParams?: {
-        page?: string;
-        action?: string;
-        resourceType?: string;
-        dateFrom?: string;
-        dateTo?: string;
-    };
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function AdminAuditPage({ searchParams }: AuditPageProps) {
-    const page = Number(searchParams?.page || "1");
-    const action = searchParams?.action || "";
-    const resourceType = searchParams?.resourceType || "";
-    const dateFrom = searchParams?.dateFrom || "";
-    const dateTo = searchParams?.dateTo || "";
+    const resolvedSearchParams = await searchParams;
+    const page = Number(getSingleQueryValue(resolvedSearchParams?.page) || "1");
+    const action = getSingleQueryValue(resolvedSearchParams?.action);
+    const resourceType = getSingleQueryValue(resolvedSearchParams?.resourceType);
+    const dateFrom = getSingleQueryValue(resolvedSearchParams?.dateFrom);
+    const dateTo = getSingleQueryValue(resolvedSearchParams?.dateTo);
+
+    if (process.env.NODE_ENV !== "production") {
+        console.info(
+            "[audit-page] params=%o parsed={page:%s,action:%s,resourceType:%s,dateFrom:%s,dateTo:%s}",
+            resolvedSearchParams,
+            page,
+            action,
+            resourceType,
+            dateFrom,
+            dateTo
+        );
+    }
 
     const result = await getAuditLogs({
         page: Number.isFinite(page) ? page : 1,

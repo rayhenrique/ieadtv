@@ -1,127 +1,86 @@
 import Link from "next/link";
-import { createPublicClient } from "@/lib/supabase/public";
-import { CalendarDays, Church, HeartHandshake, Newspaper } from "lucide-react";
+import { CalendarDays, Church, HandHelping, Newspaper } from "lucide-react";
+import { getGlobalSearchResults } from "@/lib/actions/busca";
+import { getSingleQueryValue } from "@/lib/search/query-params";
 
 type SearchPageProps = {
-    searchParams?: {
-        q?: string;
-    };
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-type NewsResult = {
-    id: string;
-    slug: string;
-    titulo: string;
-    resumo: string | null;
-    published_at: string | null;
-    created_at: string;
-};
+export const dynamic = "force-dynamic";
 
-type EventResult = {
-    id: string;
-    titulo: string;
-    descricao: string | null;
-    data_inicio: string;
-    local: string | null;
-};
+const MIN_QUERY_LENGTH = 2;
 
-type CongregationResult = {
-    id: string;
-    slug: string;
-    nome: string;
-    dirigente: string | null;
-    endereco: string | null;
-};
+function escapeRegExp(value: string) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-type CampaignResult = {
-    id: string;
-    titulo: string;
-    descricao: string | null;
-    tipo: string | null;
-};
+function tokenizeForHighlight(query: string) {
+    return query
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 10);
+}
 
-function includesQuery(text: string | null | undefined, query: string) {
-    if (!text) return false;
-    return text.toLowerCase().includes(query);
+function renderHighlightedText(text: string, tokens: string[]) {
+    if (!text || tokens.length === 0) {
+        return text;
+    }
+
+    const pattern = tokens.map(escapeRegExp).join("|");
+    if (!pattern) {
+        return text;
+    }
+
+    const regex = new RegExp(`(${pattern})`, "gi");
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+        const isMatch = tokens.some(
+            (token) => token.toLowerCase() === part.toLowerCase()
+        );
+
+        if (!isMatch) {
+            return <span key={`txt-${index}`}>{part}</span>;
+        }
+
+        return (
+            <mark
+                key={`mark-${index}`}
+                className="rounded bg-yellow-100 px-0.5 text-foreground"
+            >
+                {part}
+            </mark>
+        );
+    });
 }
 
 export default async function BuscaPage({ searchParams }: SearchPageProps) {
-    const query = (searchParams?.q || "").trim();
-    const normalizedQuery = query.toLowerCase();
-    const hasQuery = normalizedQuery.length >= 2;
+    const resolvedSearchParams = await searchParams;
+    const query = getSingleQueryValue(resolvedSearchParams?.q);
 
-    let noticias: NewsResult[] = [];
-    let eventos: EventResult[] = [];
-    let congregacoes: CongregationResult[] = [];
-    let campanhas: CampaignResult[] = [];
-
-    if (hasQuery) {
-        const supabase = createPublicClient();
-        const nowIso = new Date().toISOString();
-
-        const [newsResponse, eventsResponse, congregationsResponse, campaignsResponse] =
-            await Promise.all([
-                supabase
-                    .from("noticias")
-                    .select("id, slug, titulo, resumo, published_at, created_at")
-                    .eq("publicado", true)
-                    .or(`published_at.is.null,published_at.lte.${nowIso}`)
-                    .order("published_at", { ascending: false, nullsFirst: false })
-                    .limit(100),
-                supabase
-                    .from("eventos")
-                    .select("id, titulo, descricao, data_inicio, local")
-                    .order("data_inicio", { ascending: true })
-                    .limit(100),
-                supabase
-                    .from("congregacoes")
-                    .select("id, slug, nome, dirigente, endereco")
-                    .order("nome", { ascending: true })
-                    .limit(100),
-                supabase
-                    .from("campanhas")
-                    .select("id, titulo, descricao, tipo")
-                    .eq("ativa", true)
-                    .order("created_at", { ascending: false })
-                    .limit(100),
-            ]);
-
-        noticias = ((newsResponse.data || []) as NewsResult[]).filter(
-            (item) =>
-                includesQuery(item.titulo, normalizedQuery) ||
-                includesQuery(item.resumo, normalizedQuery)
-        );
-
-        eventos = ((eventsResponse.data || []) as EventResult[]).filter(
-            (item) =>
-                includesQuery(item.titulo, normalizedQuery) ||
-                includesQuery(item.descricao, normalizedQuery) ||
-                includesQuery(item.local, normalizedQuery)
-        );
-
-        congregacoes = ((congregationsResponse.data || []) as CongregationResult[]).filter(
-            (item) =>
-                includesQuery(item.nome, normalizedQuery) ||
-                includesQuery(item.dirigente, normalizedQuery) ||
-                includesQuery(item.endereco, normalizedQuery)
-        );
-
-        campanhas = ((campaignsResponse.data || []) as CampaignResult[]).filter(
-            (item) =>
-                includesQuery(item.titulo, normalizedQuery) ||
-                includesQuery(item.descricao, normalizedQuery) ||
-                includesQuery(item.tipo, normalizedQuery)
-        );
+    if (process.env.NODE_ENV !== "production") {
+        console.info("[busca-page] raw_q=%o normalized_q=%s", resolvedSearchParams?.q, query);
     }
 
-    const totalResults =
-        noticias.length + eventos.length + congregacoes.length + campanhas.length;
+    const hasQuery = query.length >= MIN_QUERY_LENGTH;
+    const highlightTokens = tokenizeForHighlight(query);
+    const results = hasQuery
+        ? await getGlobalSearchResults({ q: query, limitPerSection: 12 })
+        : null;
+
+    const totalResults = results?.total || 0;
+    const noticias = results?.sections.noticias || [];
+    const eventos = results?.sections.eventos || [];
+    const congregacoes = results?.sections.congregacoes || [];
+    const missoes = results?.sections.missoes || [];
 
     return (
         <div className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">Busca</h1>
             <p className="mt-2 text-muted-foreground">
-                Pesquise notícias, eventos, congregações e campanhas.
+                Pesquise notícias, eventos, congregações e missões.
             </p>
 
             {!query ? (
@@ -130,11 +89,15 @@ export default async function BuscaPage({ searchParams }: SearchPageProps) {
                         Digite um termo na busca do topo para encontrar conteúdos.
                     </p>
                 </div>
-            ) : !hasQuery ? (
+            ) : query.length < MIN_QUERY_LENGTH ? (
                 <div className="mt-8 rounded-lg border border-border bg-white p-6">
                     <p className="text-muted-foreground">
                         Use pelo menos 2 caracteres para buscar.
                     </p>
+                </div>
+            ) : results?.error ? (
+                <div className="mt-8 rounded-lg border border-red-200 bg-red-50 p-6">
+                    <p className="text-red-700">{results.error}</p>
                 </div>
             ) : (
                 <div className="mt-8 space-y-8">
@@ -142,6 +105,9 @@ export default async function BuscaPage({ searchParams }: SearchPageProps) {
                         <p className="text-sm text-muted-foreground">
                             Resultado para <span className="font-semibold text-foreground">&quot;{query}&quot;</span>:{" "}
                             <span className="font-semibold text-foreground">{totalResults}</span> itens encontrados.
+                        </p>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                            Ordenação por relevância e data. Busca sem distinção de acentuação.
                         </p>
                     </div>
 
@@ -158,10 +124,12 @@ export default async function BuscaPage({ searchParams }: SearchPageProps) {
                                         href={`/noticias/${item.slug}`}
                                         className="rounded-lg border border-border bg-white p-4 transition-shadow hover:shadow-sm"
                                     >
-                                        <h3 className="font-semibold text-foreground">{item.titulo}</h3>
-                                        {item.resumo && (
+                                        <h3 className="font-semibold text-foreground">
+                                            {renderHighlightedText(item.title, highlightTokens)}
+                                        </h3>
+                                        {item.summary && (
                                             <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                                                {item.resumo}
+                                                {renderHighlightedText(item.summary, highlightTokens)}
                                             </p>
                                         )}
                                     </Link>
@@ -185,14 +153,16 @@ export default async function BuscaPage({ searchParams }: SearchPageProps) {
                                         href="/eventos"
                                         className="rounded-lg border border-border bg-white p-4 transition-shadow hover:shadow-sm"
                                     >
-                                        <h3 className="font-semibold text-foreground">{item.titulo}</h3>
-                                        {item.descricao && (
+                                        <h3 className="font-semibold text-foreground">
+                                            {renderHighlightedText(item.title, highlightTokens)}
+                                        </h3>
+                                        {item.description && (
                                             <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                                                {item.descricao}
+                                                {renderHighlightedText(item.description, highlightTokens)}
                                             </p>
                                         )}
                                         <p className="mt-2 text-xs text-muted-foreground">
-                                            {new Date(item.data_inicio).toLocaleDateString("pt-BR")}
+                                            {new Date(item.startDate).toLocaleDateString("pt-BR")}
                                         </p>
                                     </Link>
                                 ))}
@@ -215,15 +185,17 @@ export default async function BuscaPage({ searchParams }: SearchPageProps) {
                                         href={`/congregacoes/${item.slug}`}
                                         className="rounded-lg border border-border bg-white p-4 transition-shadow hover:shadow-sm"
                                     >
-                                        <h3 className="font-semibold text-foreground">{item.nome}</h3>
-                                        {item.dirigente && (
+                                        <h3 className="font-semibold text-foreground">
+                                            {renderHighlightedText(item.name, highlightTokens)}
+                                        </h3>
+                                        {item.leader && (
                                             <p className="mt-1 text-sm text-muted-foreground">
-                                                Dirigente: {item.dirigente}
+                                                Dirigente: {renderHighlightedText(item.leader, highlightTokens)}
                                             </p>
                                         )}
-                                        {item.endereco && (
+                                        {item.address && (
                                             <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                                                {item.endereco}
+                                                {renderHighlightedText(item.address, highlightTokens)}
                                             </p>
                                         )}
                                     </Link>
@@ -236,28 +208,30 @@ export default async function BuscaPage({ searchParams }: SearchPageProps) {
 
                     <section className="space-y-4">
                         <h2 className="inline-flex items-center gap-2 text-xl font-semibold text-foreground">
-                            <HeartHandshake className="h-5 w-5 text-primary" />
-                            Campanhas ({campanhas.length})
+                            <HandHelping className="h-5 w-5 text-primary" />
+                            Missões ({missoes.length})
                         </h2>
-                        {campanhas.length > 0 ? (
+                        {missoes.length > 0 ? (
                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                {campanhas.map((item) => (
+                                {missoes.map((item) => (
                                     <Link
                                         key={item.id}
-                                        href="/campanhas"
+                                        href={`/noticias/${item.slug}`}
                                         className="rounded-lg border border-border bg-white p-4 transition-shadow hover:shadow-sm"
                                     >
-                                        <h3 className="font-semibold text-foreground">{item.titulo}</h3>
-                                        {item.descricao && (
+                                        <h3 className="font-semibold text-foreground">
+                                            {renderHighlightedText(item.title, highlightTokens)}
+                                        </h3>
+                                        {item.summary && (
                                             <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                                                {item.descricao}
+                                                {renderHighlightedText(item.summary, highlightTokens)}
                                             </p>
                                         )}
                                     </Link>
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm text-muted-foreground">Nenhum resultado em campanhas.</p>
+                            <p className="text-sm text-muted-foreground">Nenhum resultado em missões.</p>
                         )}
                     </section>
                 </div>
