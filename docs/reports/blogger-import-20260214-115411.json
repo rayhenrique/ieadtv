@@ -1,0 +1,284 @@
+{
+  "mode": "dry-run",
+  "source": "https://blogadteotoniovilela.blogspot.com/feeds/posts/default?alt=json",
+  "executedAt": "2026-02-14T14:54:11.382Z",
+  "totalEsperadoNoFeed": 45,
+  "totalLidos": 45,
+  "totalNovos": 44,
+  "totalDuplicados": 1,
+  "totalFalhas": 0,
+  "imported": [
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-2296969470481880879",
+      "slug": "convencao-estadual-2025-chega-ao-fim",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/convencao-estadual-2025-chega-ao-fim.html",
+      "publishedAt": "2025-08-31T01:00:00.025Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-1259212522651261106",
+      "slug": "juventude-assembleiana-e-renovada-no",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/juventude-assembleiana-e-renovada-no.html",
+      "publishedAt": "2025-08-30T20:00:00.004Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-3002682335081088941",
+      "slug": "penultima-noite-de-convencao-estadual",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/penultima-noite-de-convencao-estadual.html",
+      "publishedAt": "2025-08-29T01:00:00.006Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-239764730883938990",
+      "slug": "pastor-ailton-junior-ministra-no",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/pastor-ailton-junior-ministra-no.html",
+      "publishedAt": "2025-08-29T01:00:00.001Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-4281852770591265773",
+      "slug": "segundo-dia-de-convencao-e-marcado-com",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/segundo-dia-de-convencao-e-marcado-com.html",
+      "publishedAt": "2025-08-28T01:00:00.008Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-3246501640614249588",
+      "slug": "abertura-da-convencao-estadual-reune",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/abertura-da-convencao-estadual-reune.html",
+      "publishedAt": "2025-08-27T01:00:00.004Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-1570131464381281467",
+      "slug": "ad-teotonio-vilela-celebra-51-anos-do",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/ad-teotonio-vilela-celebra-51-anos-do.html",
+      "publishedAt": "2025-08-20T23:10:00.012Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5584621354504902032",
+      "slug": "convencao-acompanhe-programacao-geral",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/convencao-acompanhe-programacao-geral.html",
+      "publishedAt": "2025-08-15T02:17:00.015Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5897459850306211804",
+      "slug": "teotonio-vilela-celebrara-mais-um-ano",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/teotonio-vilela-celebrara-mais-um-ano.html",
+      "publishedAt": "2025-08-13T21:45:00.011Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-6739022602468911615",
+      "slug": "rev-jose-orisvaldo-nunes-de-lima",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/rev-jose-orisvaldo-nunes-de-lima.html",
+      "publishedAt": "2025-08-08T22:58:00.009Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-1346803478764931958",
+      "slug": "pr-jose-orisvaldo-nunes-e-reconduzido",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/pr-jose-orisvaldo-nunes-e-reconduzido.html",
+      "publishedAt": "2025-08-08T22:50:00.002Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-3303803624744874779",
+      "slug": "convencao-estadual-celebrara-110-anos",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/08/convencao-estadual-celebrara-110-anos.html",
+      "publishedAt": "2025-08-07T02:52:00.000Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-3075185736995072154",
+      "slug": "damiana-da-silva-irma-zoia-que",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/07/damiana-da-silva-irma-zoia-que.html",
+      "publishedAt": "2025-07-24T16:15:00.004Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-1788035744483977764",
+      "slug": "parque-do-futuro-anuncia-festividade-do",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/07/parque-do-futuro-anuncia-festividade-do.html",
+      "publishedAt": "2025-07-24T16:08:00.009Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5786985612401890123",
+      "slug": "guadalupe-anuncia-festividade-unificada",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/07/guadalupe-anuncia-festividade-unificada.html",
+      "publishedAt": "2025-07-23T02:23:00.011Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-3539964370566101208",
+      "slug": "guadalupe-anuncia-festividade-em",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/07/guadalupe-anuncia-festividade-em.html",
+      "publishedAt": "2025-07-23T02:09:00.008Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-7935540634412561471",
+      "slug": "18-congresso-de-senhoras-da-ad-teotonio",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/07/18-congresso-de-senhoras-da-ad-teotonio.html",
+      "publishedAt": "2025-07-07T01:58:00.062Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-566362640029444796",
+      "slug": "assembleia-de-deus-em-teotonio-vilela",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/06/assembleia-de-deus-em-teotonio-vilela.html",
+      "publishedAt": "2025-06-25T15:22:00.010Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-359301387303129347",
+      "slug": "congresso-useadetev-2025",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/06/congresso-useadetev-2025.html",
+      "publishedAt": "2025-06-15T19:50:00.022Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-8538843368920521552",
+      "slug": "rev-jose-orisvaldo-nunes-de-lima-e",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/04/rev-jose-orisvaldo-nunes-de-lima-e.html",
+      "publishedAt": "2025-04-19T11:29:00.000Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5898939163113005885",
+      "slug": "teotonio-vilela-recebe-102-escola",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/04/teotonio-vilela-recebe-102-escola.html",
+      "publishedAt": "2025-04-06T00:43:00.002Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-2893228057648505108",
+      "slug": "confira-programacao-da-102-escola",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/03/confira-programacao-da-102-escola.html",
+      "publishedAt": "2025-03-22T04:06:00.003Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5704755814919647813",
+      "slug": "ad-teotonio-vilela-celebra-o",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/02/ad-teotonio-vilela-celebra-o.html",
+      "publishedAt": "2025-02-14T01:00:00.004Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-6098404791578389044",
+      "slug": "pr-alberto-olimpio-celebra-primeira",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/01/pr-alberto-olimpio-celebra-primeira.html",
+      "publishedAt": "2025-01-26T13:45:00.009Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-4329539791699811135",
+      "slug": "ad-teotonio-vilela-celebra-o-dia-da",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/12/ad-teotonio-vilela-celebra-o-dia-da.html",
+      "publishedAt": "2024-12-07T20:00:00.001Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-8065851141846945962",
+      "slug": "cinco-pessoas-aceitam-jesus-em-cruzada",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/11/cinco-pessoas-aceitam-jesus-em-cruzada.html",
+      "publishedAt": "2024-11-03T01:00:00.001Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-6624100056043511442",
+      "slug": "curas-batismos-e-poder-do-alto-marcam",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/10/curas-batismos-e-poder-do-alto-marcam.html",
+      "publishedAt": "2024-10-21T01:00:00.002Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-4094316800476681645",
+      "slug": "ad-teotonio-vilela-celebra-30-anos-do",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/10/ad-teotonio-vilela-celebra-30-anos-do.html",
+      "publishedAt": "2024-10-14T01:00:00.002Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-4758143833365066043",
+      "slug": "ad-teotonio-vilela-celebra-50",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/08/ad-teotonio-vilela-celebra-50.html",
+      "publishedAt": "2024-08-12T01:00:00.010Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-6029546801262235790",
+      "slug": "pr-jose-alberto-olimpio-celebra-santa",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/07/pr-jose-alberto-olimpio-celebra-santa.html",
+      "publishedAt": "2024-07-07T01:00:00.001Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-279375593576113605",
+      "slug": "pr-jose-alberto-olimpio-e-o-novo-lider",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/06/pr-jose-alberto-olimpio-e-o-novo-lider.html",
+      "publishedAt": "2024-06-07T01:00:00.001Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-9044228178318342218",
+      "slug": "blog-post",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/01/blog-post.html",
+      "publishedAt": "2024-01-22T03:23:00.039Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5774442021415652677",
+      "slug": "ad-parque-do-futuro",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/03/ad-parque-do-futuro.html",
+      "publishedAt": "2024-01-22T01:42:00.022Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-2810493773473279241",
+      "slug": "institucional",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/01/institucional.html",
+      "publishedAt": "2024-01-15T19:42:00.015Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-3779378245504500981",
+      "slug": "igreja-evangelica-assembleia-de-deus-no",
+      "url": "https://blogadteotoniovilela.blogspot.com/2024/09/igreja-evangelica-assembleia-de-deus-no.html",
+      "publishedAt": "2024-01-02T00:27:00.009Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-1784197015758091992",
+      "slug": "ad-jose-quincas",
+      "url": "https://blogadteotoniovilela.blogspot.com/2023/10/ad-jose-quincas.html",
+      "publishedAt": "2023-10-01T20:47:00.024Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5304732735153506336",
+      "slug": "ad-quilombo-abobreiras",
+      "url": "https://blogadteotoniovilela.blogspot.com/2023/07/ad-quilombo-abobreiras.html",
+      "publishedAt": "2023-07-29T01:19:00.038Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5857368557152374143",
+      "slug": "iead-agua-de-menino",
+      "url": "https://blogadteotoniovilela.blogspot.com/2023/07/iead-agua-de-menino.html",
+      "publishedAt": "2023-07-29T01:13:00.006Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5055327234825808654",
+      "slug": "iead-sede",
+      "url": "https://blogadteotoniovilela.blogspot.com/2023/07/iead-sede.html",
+      "publishedAt": "2023-07-23T02:35:00.081Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-1309052780238652558",
+      "slug": "agenda-2025",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/07/agenda-2025.html",
+      "publishedAt": "2023-07-15T01:52:00.001Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-3591440880201552557",
+      "slug": "iead-bairro-centro",
+      "url": "https://blogadteotoniovilela.blogspot.com/2023/06/iead-bairro-centro.html",
+      "publishedAt": "2023-06-22T19:18:00.023Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-7095806360785283721",
+      "slug": "cremos",
+      "url": "https://blogadteotoniovilela.blogspot.com/2025/06/cremos.html",
+      "publishedAt": "2023-06-15T19:39:00.001Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-8438558990012512744",
+      "slug": "pr",
+      "url": "https://blogadteotoniovilela.blogspot.com/2023/06/pr.html",
+      "publishedAt": "2023-06-15T18:13:00.115Z"
+    },
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-4853329541022969399",
+      "slug": "ad-guadalupe",
+      "url": "https://blogadteotoniovilela.blogspot.com/2023/04/ad-guadalupe.html",
+      "publishedAt": "2023-04-11T03:11:00.030Z"
+    }
+  ],
+  "duplicated": [
+    {
+      "sourceId": "tag:blogger.com,1999:blog-2168800801733955740.post-5476965295309792103",
+      "slug": "assembleia-de-deus-em-teotonio-vilela",
+      "reason": "slug_already_exists"
+    }
+  ],
+  "failed": []
+}

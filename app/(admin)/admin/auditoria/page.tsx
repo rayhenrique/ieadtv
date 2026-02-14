@@ -32,6 +32,7 @@ const ACTION_LABELS: Record<string, string> = {
     PAGINA_DELETE: "Exclusão de página",
     CONFIGURACAO_UPDATE: "Atualização de configuração",
     PERFIL_UPDATE: "Atualização de perfil",
+    BLOGGER_IMPORT_NEWS: "Importação de notícias do Blogger",
 };
 
 const RESOURCE_LABELS: Record<string, string> = {
