@@ -54,7 +54,9 @@ export async function getPublicEvents(limit = 4) {
     const { data, error } = await supabase
         .from("eventos")
         .select("*")
-        .gte("data_inicio", nowIso)
+        .or(
+            `data_inicio.gte.${nowIso},and(data_inicio.lte.${nowIso},data_fim.gte.${nowIso})`
+        )
         .order("data_inicio", { ascending: true })
         .limit(limit);
 

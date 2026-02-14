@@ -283,6 +283,12 @@ export default async function HomePage() {
                         <div className="stagger-grid mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
                             {events.map((event) => {
                                 const startDate = new Date(event.data_inicio);
+                                const endDate = event.data_fim ? new Date(event.data_fim) : null;
+                                const now = new Date();
+                                const isOngoing =
+                                    endDate !== null &&
+                                    startDate.getTime() <= now.getTime() &&
+                                    endDate.getTime() >= now.getTime();
                                 const day = startDate.getDate().toString().padStart(2, "0");
                                 const month = startDate
                                     .toLocaleDateString("pt-BR", { month: "short" })
@@ -299,7 +305,14 @@ export default async function HomePage() {
                                             <span className="text-[10px] font-semibold uppercase text-primary">{month}</span>
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-semibold text-foreground">{event.titulo}</h3>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <h3 className="font-semibold text-foreground">{event.titulo}</h3>
+                                                {isOngoing && (
+                                                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
+                                                        Em andamento
+                                                    </span>
+                                                )}
+                                            </div>
                                             {event.descricao && (
                                                 <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
                                                     {event.descricao}
